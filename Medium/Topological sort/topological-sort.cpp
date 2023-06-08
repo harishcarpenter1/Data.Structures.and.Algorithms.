@@ -3,40 +3,40 @@
 using namespace std;
 
 // } Driver Code Ends
-
 class Solution
 {
 	public:
-	
-	void dfs(int start, vector<bool> &vis, stack<int> &s, vector<int> adj[]) {
-	    vis[start] = 1;
-	    
-	    for(int nbr : adj[start]) {
-	        if(!vis[nbr]) {
-	            dfs(nbr, vis, s, adj);
+	//Function to return list containing vertices in Topological order. 
+	void dfs(vector<int>adj[], vector<int>&vis, stack<int>&st, int i){
+	    vis[i] = 1;
+	    for(auto it:adj[i]){
+	        if(!vis[it]){
+	            dfs(adj,vis,st,it);
 	        }
 	    }
-	    
-	    s.push(start);
+	    st.push(i);
 	}
-	
-	vector<int> topoSort(int V, vector<int> adj[]) {
-	    vector<bool> vis(V);
-	    stack<int> s;
-	    for(int i = 0; i < V; i++) {
-	        if(!vis[i]) {
-	            dfs(i, vis, s, adj);
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    // code here
+	    vector<int>vis(V,0);
+	    stack<int>st;
+	    
+	    for(int i = 0; i<V; i++){
+	        if(!vis[i]){
+	            dfs(adj,vis,st,i);
 	        }
 	    }
-	    vector<int> res;
-	    for(int i = 0; i < V; i++) {
-	        res.push_back(s.top()); s.pop();
+	    
+	    vector<int>ans;
+	    while(!st.empty()){
+	        ans.push_back(st.top());
+	        st.pop();
 	    }
-	    return res;
+	    
+	    return ans;
 	}
 };
-
-
 
 //{ Driver Code Starts.
 

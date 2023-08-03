@@ -7,59 +7,35 @@ using namespace std;
 // } Driver Code Ends
 // User function Template for C++
 class Solution {
-private:
-  void dfs(vector<vector<pair<int,int>>>&dg, vector<int>&vis, stack<int>&st, 
-  int node){
-      vis[node] = 1;
-      for(auto it:dg[node]){
-          if(!vis[it.first]){
-              dfs(dg,vis,st,it.first);
-          }
-      }
-      st.push(node);
-  }
   public:
-     vector<int> shortestPath(int N,int M, vector<vector<int>>& ed){
-         
-        vector<vector<pair<int,int>>>dg(N);
-        for(auto it : ed){
-            dg[it[0]].push_back({it[1],it[2]});
-        }
+     vector<int> shortestPath(int N,int M, vector<vector<int>>& edges){
+        vector<vector<int>> adj[N];
+        for(auto e : edges)
+            adj[e[0]].push_back( {e[1], e[2]} );
+
+        vector<int> distance(N, INT_MAX);
+        distance[0] = 0;
+        queue<int> q;
+        q.push(0);
         
-        int src = 0;
-        stack<int>st;
-        vector<int>dist(N, 1e9);
-        vector<int>vis(N,0);
-        
-        dist[src] = 0;
-        
-        for(int i = 0; i<N; i++){
-            if(!vis[i]){
-                dfs(dg, vis, st, i);
+        while(q.size()){
+            int node = q.front();   q.pop(); 
+
+            for(auto padosi : adj[node]){
+                int nbr = padosi[0] ;
+                int dist = padosi[1];
+                if(distance[node] + dist < distance[nbr]){
+                    distance[nbr] = distance[node] + dist ;
+                    q.push(nbr);
+                }
             }
         }
-        
-        while(!st.empty()){
-            int node = st.top();
-            st.pop();
-            
-             for(auto ad : dg[node]){
-                 if(dist[node]+ad.second < dist[ad.first]){
-                     dist[ad.first] = dist[node]+ad.second;
-                 }
-             }
-        }
-        
-        
-        for(int i = 0; i<N; i++){
-            if(dist[i] == 1e9){
-                dist[i] = -1;
-            }
-        }
-        
-        return dist;
+        for(auto &a : distance)
+            if(a==INT_MAX)a = -1;
+        return distance ;
     }
 };
+ 
 
 
 //{ Driver Code Starts.

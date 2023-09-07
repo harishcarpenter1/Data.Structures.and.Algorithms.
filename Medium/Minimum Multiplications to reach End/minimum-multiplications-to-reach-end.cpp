@@ -10,27 +10,40 @@ using namespace std;
 
 class Solution {
   public:
+    const int MAXN = 1e5 + 5;
+    const int MOD = 100000;
     int minimumMultiplications(vector<int>& arr, int start, int end) {
-        queue<pair<int,int>>q;
-        q.push({0,start});
-        vector<int>dist(100000,1e9);
-        dist[start] = 0;
+        int n = arr.size();
         
-        while(!q.empty()){
-            int node = q.front().second;
-            int steps = q.front().first;
-            q.pop();
+        vector<bool> visited(MAXN, false);
+        visited[start] = true;
+        
+        queue<int> q;
+        q.push(start);
+    
+        int steps = 0;
+        while(!q.empty()) {
+            int qsize = q.size();
             
-            for(int i = 0; i<arr.size(); i++){
-                int newNode = (node*arr[i])%100000;
-                if(steps + 1 < dist[newNode]){
-                    dist[newNode] = steps + 1;
-                    q.push({steps+1, newNode});
-                    if(newNode == end) return steps+1;
+            for(int i = 0; i < qsize; i++) {
+                int x = q.front();
+                q.pop();
+                
+                if(x == end) {
+                    return steps;
+                }
+                
+                for(int num : arr) {
+                    int newX = (x * 1LL * num) % MOD;
+                    
+                    if(!visited[newX]) {
+                        q.push(newX);
+                        visited[newX] = true;
+                    }
                 }
             }
+            steps++;
         }
-        
         return -1;
     }
 };

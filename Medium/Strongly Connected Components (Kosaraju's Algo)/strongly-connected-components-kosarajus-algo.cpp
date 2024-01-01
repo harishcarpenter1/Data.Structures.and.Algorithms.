@@ -6,61 +6,64 @@ using namespace std;
 class Solution
 {
     private:
-    void dfs1(vector<vector<int>>&adj, vector<int>&vis, stack<int>&st, int node){
-        vis[node] = 1;
+    void dfs(vector<vector<int>>& adj, vector<int>&vis, int node, stack<int>&st){
+        vis[node]=1;
         for(auto it:adj[node]){
             if(!vis[it]){
-                dfs1(adj, vis, st, it);
+                dfs(adj,vis,it,st);
             }
         }
         st.push(node);
     }
-    void dfs3(vector<vector<int>>&adj, vector<int>&vis, int node){
-        vis[node] = 1;
-        for(auto it:adj[node]){
+    
+    void dfs3(vector<vector<int>>&adjT, int node, vector<int>&vis){
+        vis[node]=1;
+        for(auto it:adjT[node]){
             if(!vis[it]){
-                dfs3(adj, vis, it);
+                dfs3(adjT, it, vis);
             }
         }
     }
+    
 	public:
 	//Function to find number of strongly connected components in the graph.
-    int kosaraju(int V, vector<vector<int>>& adj)
+    int kosaraju(int n, vector<vector<int>>& adj)
     {
-        //  step 1. sort the edges based on finish time
+        vector<int>vis(n,0);
         stack<int>st;
-        vector<int>vis(V, 0);
-        for(int i = 0; i<V; i++){
+        
+        // step 1 : Get the node according to their fininsh time 
+        for(int i = 0; i<n; i++){
             if(!vis[i]){
-                dfs1(adj, vis, st, i);
+                dfs(adj, vis, i, st);
             }
         }
         
-        // step 2. Reverse the edges
-        vector<vector<int>>revG(V);
-        for(int i = 0; i<V; i++){
-            // Marking all nodes unvisited
-            vis[i] = 0;
+        // step 2 reverse the graph edges 
+        vector<vector<int>>adjT(n);
+
+        for(int i = 0; i<n; i++){
+            vis[i]=0;
+            // edge from i to it 
+            // reverse edge will be it to i
             for(auto it:adj[i]){
-                // edge from i - > it
-                // reverseedge it - > i
-                revG[it].push_back(i);
+                adjT[it].push_back(i);
             }
         }
         
-        // 3. Apply DFS again to find SCCs
-        int cntSCC = 0;
+        // step 3 find the scc using dfs
+        int scc = 0;
         while(!st.empty()){
             int node = st.top();
             st.pop();
-           
             if(!vis[node]){
-                cntSCC++;
-                dfs3(revG, vis, node);
+                scc++;
+                dfs3(adjT, node, vis);
             }
-            
         }
-        return cntSCC;
+        
+        return scc;
+        
     }
 };
 

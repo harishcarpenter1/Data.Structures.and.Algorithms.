@@ -8,62 +8,55 @@ using namespace std;
 //User function Template for C++
 
 class Solution {
-  private:
+private:
     int timer = 1;
-    void dfs(vector<int>adj[], vector<int>&vis, vector<int>&markAP, vector<int>&low, 
-   vector<int>&stp, int node, int parent){
+    void dfs(int node, int parent, vector<int> &vis, int tin[], int low[],
+             vector<int> &mark, vector<int>adj[]) {
         vis[node] = 1;
-        low[node] = timer;
-        stp[node] = timer;
+        tin[node] = low[node] = timer;
         timer++;
-        int childcnt = 0;
-        for(auto adjNode:adj[node]){
-            // If the adjasecnt not visited
-            if(adjNode == parent) continue;
-            if(vis[adjNode] == 0){
-                dfs(adj, vis, markAP, low, stp, adjNode, node);
-                low[node] = min(low[node], low[adjNode]);
-                //  Checking for AP
-                if(low[adjNode] >= stp[node] && parent != -1){
-                    markAP[node] = 1;
+        int child = 0;
+        for (auto it : adj[node]) {
+            if (it == parent) continue;
+            if (!vis[it]) {
+                dfs(it, node, vis, tin, low, mark, adj);
+                low[node] = min(low[node], low[it]);
+                if (low[it] >= tin[node] && parent != -1) {
+                    mark[node] = 1;
                 }
-                childcnt++;
+                child++;
             }
-            else{
-                low[node] = min(low[node], stp[adjNode]);
+            else {
+                low[node] = min(low[node], tin[it]);
             }
-           
         }
-        if(parent == -1 && childcnt > 1){
-             markAP[node] = 1;
+        if (child > 1 && parent == -1) {
+            mark[node] = 1;
         }
     }
-  public:
+public:
     vector<int> articulationPoints(int n, vector<int>adj[]) {
-      
-        vector<int>vis(n,0);
-        vector<int>low(n);
-        vector<int>stp(n);
-        vector<int> markAP(n,0);
-        vector<int>ans;
-        
-        // Checking for ever components
-        for(int i  = 0; i<n; i++){
-            if(!vis[i]){
-                dfs(adj, vis, markAP, low, stp, i, -1);
+        vector<int> vis(n, 0);
+        int tin[n];
+        int low[n];
+        vector<int> mark(n, 0);
+        for (int i = 0; i < n; i++) {
+            if (!vis[i]) {
+                dfs(i, -1, vis, tin, low, mark, adj);
             }
         }
-        
-        // Marked AP
-        for(int i = 0; i<n; i++){
-            if(markAP[i]){
+        vector<int> ans;
+        for (int i = 0; i < n; i++) {
+            if (mark[i] == 1) {
                 ans.push_back(i);
             }
         }
-        if(ans.size() == 0) return {-1};
+        if (ans.size() == 0) return { -1};
         return ans;
     }
 };
+
+
 
 //{ Driver Code Starts.
 

@@ -4,42 +4,42 @@ using namespace std;
 
 
 // } Driver Code Ends
+
+
 class Solution {
   public:
-    int splitArray(int arr[] ,int N, int K) {
-        // code here
-        int totalSum =0,mx=INT_MIN;
-        for(int i=0;i<N;i++) {
-            totalSum+=arr[i];
-            mx = max(mx,arr[i]);
+    bool check(int arr[], int n, int mid, int k){
+        int cs = 1, sm = 0;
+        for(int i = 0; i<n; i++){
+            if(sm+arr[i]<=mid){
+                sm+=arr[i];
+            }else{
+                sm = arr[i];
+                cs++;
+            }
         }
-        
-        int lo=mx,hi=totalSum,ans=INT_MAX;
-        while(lo<=hi) {
-            int mid = lo+(hi-lo)/2;
-            if(isValid(arr,mid,K,N)) {
-                ans=min(ans,mid);
-                hi=mid-1;   // To minimize our answer
-            } else {
-                lo=mid+1;   // To get Valid Range
+        return cs<=k;
+    }
+    int splitArray(int arr[] ,int n, int k) {
+        int l = *max_element(arr,arr+n), sum = 0, mid;
+        for(int i = 0; i<n; i++) sum+=arr[i];
+        int r = sum;
+        int ans = INT_MAX;
+        while(l<=r){
+            mid = (l+r)/2;
+            if(check(arr, n, mid, k)){
+                ans = mid;
+                r = mid - 1;
+            }else{
+                l = mid + 1;
             }
         }
         return ans;
     }
-    // to check if requiredSum is possible to get by splitting array in k or less then k subarray
-    bool isValid(int arr[],int requiredSum,int k,int n) {
-        int sum=0,count=1;
-        for(int i=0;i<n;i++) {
-            if(sum+arr[i]<=requiredSum) {
-                sum+=arr[i];
-            } else {
-                sum=arr[i];
-                count++;
-            }
-        }
-        return count<=k;
-    }
 };
+
+
+
 
 //{ Driver Code Starts.
 

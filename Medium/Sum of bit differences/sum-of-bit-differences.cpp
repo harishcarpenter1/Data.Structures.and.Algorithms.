@@ -6,31 +6,32 @@ using namespace std;
 
 // } Driver Code Ends
 //User function template for C++
+//User function template for C++
 class Solution{
 public:
-// 	int countDifferingBits(int a, int b) {
-//         // bitset<sizeof(int) * 8> bits(a ^ b);
-//         // integer size - 4 bytes like 2, 3, 4, 5 
-//         // total 8 * 4 = 32 bits 
-        
-//         /*  int xor_res = a^b;
-//             int count = 0;
-//             while(xor_res){
-//                 count += xor_res & 1;
-//                 xor_res >>= 1;
-//             }
-//         */
+/*
+	int countDifferingBits(int a, int b) {
 
-//         bitset<32> bits(a ^ b);
-//         return bits.count();
-//     }
+        int xor_res = a^b;
+        int count = 0;
+        while(xor_res){
+            count += xor_res & 1;
+            xor_res >>= 1;
+        }
+        
+        --------------- or -------------
+
+        bitset<32> bits(a ^ b);
+        return bits.count();
+    }
+*/
 	long long sumBitDifferences(int arr[], int n) {
 	    long long ans = 0;
 	    // 32 bits max
 	    // here arr[i] <= 10^5 so max bits log2(10^5) = 16.61
 	    // hence max 17 bits
 	    // traverse for every bit
-	    for(int i = 0; i<=17; i++){
+	    for(int i = 0; i<17; i++){
 	        // count set bits for each number at ith position
 	        long long cntset = 0;
 	        // every number
@@ -40,7 +41,8 @@ public:
 	                cntset++;
 	            }
 	            // right shift the arr[j]th number 
-	            arr[j]/=2;
+	            // arr[j]/=2;
+	            arr[j] >>= 1;
 	        }
 	        // formula to count the pairs - no. of set bits * no of unset bits * 2
 	        ans += cntset*(n-cntset)*2;
@@ -49,6 +51,8 @@ public:
 	    return ans;
 	}
 };
+
+
 
 //{ Driver Code Starts.
 

@@ -4,10 +4,12 @@ using namespace std;
 
 
 // } Driver Code Ends
-
-
-class Solution {
-public:
+class Solution{
+    public:
+        
+    // A[]: input array
+    // N: size of array
+    // Function to find the maximum index difference.
     int maxIndexDiff(int arr[], int N) 
     { 
         stack<int> st;
@@ -33,9 +35,6 @@ public:
         return ans;
     }
 };
-
-
-
 
 //{ Driver Code Starts.
   

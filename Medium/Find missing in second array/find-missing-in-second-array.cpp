@@ -3,22 +3,21 @@
 using namespace std;
 
 // } Driver Code Ends
-
 class Solution{
-
+	
+	
 	public:
-	vector<long long> findMissing(
-	    long long A[], 
-    	long long B[],  
-        int n, int m) 
+	vector<int> findMissing(int arr[], int b[], int n, int m) 
 	{ 
-	    vector<long long>ans;
-	    unordered_map<long long, int>mp;
-	    for(int i = 0; i<m; i++) mp[B[i]]++;
-	    for(int j = 0; j<n; j++){
-	        if(mp.find(A[j])==mp.end()){
-	            ans.push_back(A[j]);
-	        }
+	    // Your code goes here
+	    vector<int>ans;
+	    set<int>st;
+	    for(int i = 0; i<m; i++){
+	       st.insert(b[i]); 
+	    }
+	    for(int i = 0; i < n ; i++){
+	        if(st.count(arr[i]) == 0)
+	         ans.push_back(arr[i]);
 	    }
 	    return ans;
 	} 
@@ -39,13 +38,13 @@ int main()
         cin>>n;
         int m;
         cin>>m;
-        long long a[n];
-        long long b[m];
+        int a[n];
+        int b[m];
         for(int i=0;i<n;i++)
         cin>>a[i];
         for(int i=0;i<m;i++)
         cin >> b[i];
-        vector<long long> ans;
+        vector<int> ans;
         
 
         Solution ob;
